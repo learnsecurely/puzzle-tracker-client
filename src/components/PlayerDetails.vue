@@ -1,15 +1,22 @@
 <template>
   <v-layout column align-center>
     <div class="player-details condensed expanded d-flex">
-      <div class="sm4 hidden-xs-only">
-        <img src="/public/monster.png" height="135px"/>
-      </div>
       <div id="player-stats" class="sm8">
         <v-flex align-items-center d-flex>
-          <v-icon :class="player_class" x-large>lens</v-icon>
+          <v-layout column d-flex style="max-width: 105px; padding-left: 35px;">
+            <v-img max-width="60px" height="50px" :src="character_class_avatar"></v-img>
+          </v-layout>
+          <!-- <v-icon :class="character_class" x-large>lens</v-icon> -->
           <v-layout column d-flex class="player-name">
-            <h3>Han Solo</h3>
-            <span class="small-text text-capitalize">Level {{ player_level }} {{ player_class }}</span>
+            <v-layout row d-flex>
+              <h3>{{ character_name }}</h3>
+            </v-layout>
+            <v-layout row d-flex>
+              <span class="small-text text-capitalize">Level {{ character_level }} {{ character_class }}</span>
+            </v-layout>
+            <v-layout row d-flex>
+              <span class="small-text">{{ character.gold }} remaining gold</span>
+            </v-layout>
           </v-layout>
         </v-flex>
         <v-flex class="progress-container">
@@ -22,7 +29,7 @@
               class="my-0"
             ></v-progress-linear>
           </v-flex>
-          <span class="small-text">{{ xp_current }}/{{ xp_max }}</span>
+          <span class="small-text">{{ xp_percent }}</span>
         </v-flex>
         <v-flex class="progress-container">
           <v-icon class="icon health" size="23px" color="red darken-1">favorite</v-icon>
@@ -34,9 +41,9 @@
               :value="health_percent"
             ></v-progress-linear>
           </v-flex>
-          <span class="small-text">{{ health_current }}/{{ player_classes[player_class].health_max }}</span>
+          <span class="small-text">{{ health_percent }}</span>
         </v-flex>
-        <v-flex v-if="player_classes[player_class].has_mana" class="progress-container">
+        <v-flex v-if="character_class_has_mana" class="progress-container">
           <v-icon class="icon mana" color="blue darken-1">opacity</v-icon>
           <v-flex class="progress">
             <v-progress-linear
@@ -46,7 +53,7 @@
               :value="mana_percent"
             ></v-progress-linear>
           </v-flex>
-          <span class="small-text">{{ mana_current }}/{{ player_classes[player_class].mana_max }}</span>
+          <span class="small-text">{{ mana_percent }} / 100</span>
         </v-flex>
       </div>
     </div>
@@ -170,28 +177,61 @@
 </style>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'PlayerDetails',
-  data: () => ({
-    show: false,
-    player_class: "healer",
-    health_current: 35,
-    health_max: 50,
-    health_percent: 70,
-    mana_current: 10,
-    mana_max: 50,
-    mana_percent: 20,
-    player_classes: {
-      wizard:  { health_max: 50,  mana_max: 50, has_mana: true  },
-      warrior: { health_max: 100, mana_max: 0,  has_mana: false },
-      healer:  { health_max: 50,  mana_max: 50, has_mana: true  }
+  data() {
+    return {
+      show: false,
+      player_classes: {
+        wizard:  { health_max: 50,  mana_max: 50, has_mana: true  },
+        warrior: { health_max: 100, mana_max: 0,  has_mana: false },
+        healer:  { health_max: 50,  mana_max: 50, has_mana: true  }
+      }
     }
-  }),
+  },
   props: {
-    player_level: String,
-    xp_percent: String,
-    xp_max: String,
-    xp_current: String
+    xp_max: Number,
+  },
+  computed: {
+    character_class_avatar: function() {
+      return "/public/" + this.character_class + "-0.5x.png"
+    },
+    character_level: function() {
+      return Math.floor(this.$store.state.character_xp_current / this.xp_max * 10)
+    },
+    xp_percent: function() {
+      if (this.player_classes[this.$store.state.character_class]) {
+        return this.$store.state.character_xp_current / this.xp_max * 100
+      }
+    },
+    health_percent: function() {
+      console.log("HERE IT IS!!!!!")
+      if (this.player_classes[this.$store.state.character_class]) {
+        return this.$store.state.character_health_current / this.player_classes[this.$store.state.character_class].health_max * 100
+      }
+    },
+    mana_percent: function() {
+      if (this.player_classes[this.$store.state.character_class]) {
+        return this.$store.state.character_mana_current / this.player_classes[this.$store.state.character_class].mana_max * 100
+      }
+    },
+    character_class_has_mana: function() {
+      if (this.$store.state.character_class) {
+        return this.player_classes[this.$store.state.character_class].has_mana
+      } else {
+        false
+      }
+    },
+    ...mapState([
+      'character',
+      'character_class',
+      'character_name',
+    ])
+  },
+  mounted() {
+    this.$store.dispatch('loadCharacter')
   }
 }
 </script>

@@ -1,43 +1,33 @@
 <template>
   <v-app dark>
-    <toolbar></toolbar>
-    <v-container fluid>
-      <v-layout column>
-        <v-flex>
-          <player-details
-            :player_level="player_level"
-            :xp_current="xp_current"
-            :xp_max="xp_max"
-            :xp_percent="xp_percent"
-          ></player-details>
-          <quests :player_level="player_level"></quests>
-        </v-flex>
-      </v-layout>
-    </v-container>
+    <toolbar/>
+    <router-view/>
   </v-app>
 </template>
+
+<style>
+[class*="formSection"]{
+  min-width: unset;
+}
+</style>
 
 <script>
 import Toolbar from './components/Toolbar'
 import PlayerDetails from './components/PlayerDetails'
 import Quests from './components/Quests'
+import Quest from './components/Quest'
+import Home from './components/Home'
+import Setup from './components/Setup'
+import { components } from 'aws-amplify-vue'
+import { Auth } from 'aws-amplify'
 
 export default {
   name: 'App',
   components: {
     Toolbar,
-    PlayerDetails,
-    Quests
-  },
-  data: () => ({
-    xp_current: 10,
-    xp_max: 100,
-    xp_percent: 12
-  }),
-  computed: {
-    player_level: function() {
-      return Math.floor(this.xp_current / this.xp_max * 10)
-    }
-  },
+    Home,
+    Setup,
+    components
+  }
 }
 </script>

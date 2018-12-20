@@ -1,8 +1,16 @@
 var path = require('path')
 var webpack = require('webpack')
 
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
 module.exports = {
   entry: './src/main.js',
+  plugins: [
+    new CopyWebpackPlugin([
+      { from: 'index.html', to: 'index.html' }
+    ])
+  ],
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -17,6 +25,20 @@ module.exports = {
     }
   },
   module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+            presets: ['env'],
+            plugins: [require('babel-plugin-transform-object-rest-spread')] // added
+        },
+        query: {
+          plugins:[ 'transform-object-rest-spread' ]
+        }
+      }
+    ],
     rules: [
       {
         test: /\.vue$/,
@@ -68,12 +90,21 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
+    new UglifyJsPlugin({
+      "uglifyOptions": {
+        compress: {
+          warnings: false
+        },
+        sourceMap: true
       }
     }),
+
+    //new webpack.optimize.UglifyJsPlugin({
+    //  sourceMap: true,
+    //  compress: {
+    //    warnings: false
+    //  }
+    //}),
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
