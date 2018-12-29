@@ -1,8 +1,8 @@
 <template>
-  <v-toolbar dark>
-    <v-toolbar-side-icon>
+  <v-toolbar color="hsl(209,20%,25%)">
+    <v-toolbar-side-icon large style="color:hsl(211,13%,65%)">
     </v-toolbar-side-icon>
-    <v-toolbar-title>PuzzleTracker</v-toolbar-title>
+    <v-toolbar-title style="margin-left: 0px; color: hsl(210,16%,82%); font-size: 30px; font-family: Charm; font-weight: 500;">Puzzle Tracker</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items>
       <v-btn
@@ -12,19 +12,19 @@
         class="pr-2"
         @click="messagesDialog = true"
       >
-        <v-badge overlap v-model="show" color="purple">
+        <v-badge overlap v-model="show" color="hsl(185,62%,45%)">
           <span
             v-if="character_newMessages"
             slot="badge">{{ character_newMessages }}
           </span>
-          <v-icon large color="grey">mail</v-icon>
+          <v-icon large color="hsl(211,13%,65%)">mail</v-icon>
         </v-badge>
       </v-btn>
       <v-dialog v-model="messagesDialog" max-width="500px">
         <v-layout row>
           <v-flex xs12 sm6 offset-sm3 style="max-width: 100%; margin-left: 0%; flex-basis: 100%;">
             <v-card>
-              <v-toolbar color="cyan" dark>
+              <v-toolbar color="hsl(210,22%,49%)">
                 <v-toolbar-side-icon></v-toolbar-side-icon>
                 <v-toolbar-title>Inbox</v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -67,7 +67,7 @@
             left
             class="pr-2"
           >
-            <v-icon large color="grey darken-1">
+            <v-icon large color="hsl(211,13%,65%)">
               account_box
             </v-icon>
           </v-btn>

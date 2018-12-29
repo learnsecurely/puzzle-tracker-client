@@ -3,19 +3,16 @@
     <div class="player-details condensed expanded d-flex">
       <div id="player-stats" class="sm8">
         <v-flex align-items-center d-flex>
-          <v-layout column d-flex style="max-width: 105px; padding-left: 35px;">
-            <v-img max-width="60px" height="50px" :src="character_class_avatar"></v-img>
+          <v-layout column d-flex style="max-width: 105px; min-width: 80px; padding-left: 32px;">
+            <v-img max-width="55px" :src="character_class_avatar"></v-img>
           </v-layout>
           <!-- <v-icon :class="character_class" x-large>lens</v-icon> -->
-          <v-layout column d-flex class="player-name">
+          <v-layout column d-flex class="player-name" style="top: -3px; position: relative;">
             <v-layout row d-flex>
               <h3>{{ character_name }}</h3>
             </v-layout>
-            <v-layout row d-flex>
-              <span class="small-text text-capitalize">Level {{ character_level }} {{ character_class }}</span>
-            </v-layout>
-            <v-layout row d-flex>
-              <span class="small-text">{{ character.gold }} remaining gold</span>
+            <v-layout row d-flex class="pl-0" style="z-index: 5; position: relative; top: 0px;">
+              <span class="small-text characteristics">L{{ character_level }} {{ character_class }} with <span class="gold-text">{{ character.gold }}g</span></span>
             </v-layout>
           </v-layout>
         </v-flex>
@@ -29,7 +26,7 @@
               class="my-0"
             ></v-progress-linear>
           </v-flex>
-          <span class="small-text">{{ xp_percent }}</span>
+          <span style="color: rgb(76, 175, 80)" class="stats-text">{{ xp_percent }}</span>
         </v-flex>
         <v-flex class="progress-container">
           <v-icon class="icon health" size="23px" color="red darken-1">favorite</v-icon>
@@ -41,7 +38,7 @@
               :value="health_percent"
             ></v-progress-linear>
           </v-flex>
-          <span class="small-text">{{ health_percent }}</span>
+          <span style="color: rgb(255, 82, 82)" class="stats-text">{{ health_percent }}</span>
         </v-flex>
         <v-flex v-if="character_class_has_mana" class="progress-container">
           <v-icon class="icon mana" color="blue darken-1">opacity</v-icon>
@@ -53,7 +50,7 @@
               :value="mana_percent"
             ></v-progress-linear>
           </v-flex>
-          <span class="small-text">{{ mana_percent }} / 100</span>
+          <span style="color: rgb(33, 150, 243)" class="stats-text">{{ mana_percent }}</span>
         </v-flex>
       </div>
     </div>
@@ -77,8 +74,32 @@
     opacity: 0;
     display: none;
   }
+  .stats-text {
+    font-family: 'Roboto';
+  }
   .small-text {
-    color: $header-color;
+    color: hsl(211,13%,65%);
+    font-weight: 700;
+    font-family: 'Open Sans';
+    padding-left: 0px;
+  }
+
+  .small-text.characteristics {
+    color: hsl(211,13%,65%);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    font-family: 'Roboto';
+    margin-left: 0px;
+    padding-left: 0px;
+  }
+
+  .gold-text {
+    color: hsl(44,92%,63%);
+    font-family: 'Open Sans';
+    font-weight: 700;
+    font-size: 13px;
     padding-left: 0px;
   }
   .profile-name-character {
@@ -86,7 +107,14 @@
   }
   .player-name {
     //margin-bottom: 1px;
-    color: $white;
+    color: hsl(201,79%,46%);
+  }
+
+  .player-name h3 {
+    font-family: Charm;
+    font-weight: 700;
+    font-size: 35px;
+    letter-spacing: 1px;
   }
 
   .progress-container {
@@ -95,10 +123,12 @@
     //margin-bottom: .1em;
   }
   .progress-container > span {
-    color: $header-color;
+    opacity: 0.7;
+    font-weight: 600;
+    font-size: 1.1em;
     margin-left: 2px;
     font-style: normal;
-    line-height: 1;
+    line-height: .75;
   }
   .progress-container > .icon {
     width: 24px;
@@ -120,7 +150,7 @@
     min-width: 0px;
 
   }
-  .progress-container .icon, .progress-container .progress, .progress-container .small-text {
+  .progress-container .icon, .progress-container .progress, .progress-container .small-text, .progress-container .stats-text {
     display: inline-block;
     vertical-align: bottom;
   }

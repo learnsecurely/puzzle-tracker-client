@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container style="background-repeat: repeat-y; background-clip: padding-box; background-size: 1600px; background-position: center 0px; background-image: url('public/techbgbareArtboard1@0.5x.png'); background-color: hsl(210,24%,16%)" fluid>
     <v-layout column>
       <v-flex>
         <player-details

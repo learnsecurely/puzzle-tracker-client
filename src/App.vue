@@ -1,5 +1,6 @@
 <template>
   <v-app dark>
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:700|Charm:700|Mukta:500,700,800|Open+Sans:400,600|Prompt:100,300,400,500,600,700|Roboto:700|ZCOOL+QingKe+HuangYou|ZCOOL+XiaoWei" rel="stylesheet">
     <toolbar/>
     <router-view/>
   </v-app>
