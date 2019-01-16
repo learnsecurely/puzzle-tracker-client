@@ -17,9 +17,12 @@ export default new Vuex.Store({
     character_level: '',
     character_xp_current: 0,
     character_health_current: null,
-    character_mana_current: 0,
+    character_mana_current: null,
     character_newMessages: 0,
     character_messages: [ ],
+    characterItemsOwned: [ ],
+    character_hints: [ ],
+    currentHint: '',
     questsCompleted: [ ],
     quests: [ ],
 
@@ -158,11 +161,11 @@ export default new Vuex.Store({
           if (character.flagStatus == "succeeded") {
             commit('SET_QUEST_MESSAGE', { message: "The flag is correct! The quest is now complete and your XP has been increased.", state: "success" })
             dispatch('loadQuests')
-            .catch(error => console.error("loadQuests [FAIL] -> " + JSON.stringify(error, null, 2)))
+            .catch(error => console.error("loadQuests [FAIL] -> " + error))
           } else if (character.flagStatus == "failed") {
             commit('SET_QUEST_MESSAGE', { message: "Incorrect flag provided. Please try again.", state: "error" })
             dispatch('loadCharacter')
-            .catch(error => console.error("loadCharacter [FAIL] -> " + JSON.stringify(error, null, 2)))
+            .catch(error => console.error("loadCharacter [FAIL] -> " + error))
           }
       })
       .catch(error => console.error("submitFlag [FAIL] -> " + JSON.stringify(error, null, 2)))
@@ -170,6 +173,142 @@ export default new Vuex.Store({
     setCharacterClass({commit,dispatch,state},characterClass) {
       console.log("characterClass -> " + JSON.stringify(characterClass,null,2))
       commit('SET_CHARACTER_CLASS', characterClass)
+    },
+    loadHint({commit,dispatch,state},questId) {
+      console.log("[loadHint] questId -> " + JSON.stringify(questId))
+      console.log("[loadHint] state.token -> " + JSON.stringify(state.token))
+      const characterId = state.character.characterId
+      const options = {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Request-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Authorization': state.token,
+        },
+      }
+
+      const data = {
+        "questId": questId,
+        "characterId": characterId
+      }
+
+      axios
+        .put('https://8nolbrxb67.execute-api.us-west-2.amazonaws.com/prod/characters/${characterId}/loadHint', data, options)
+        .then(response => response.data)
+        .then(hint => { 
+          console.log("[loadHint] HTTP GET: PASS -> " + JSON.stringify(hint, null, 2))
+          commit('LOAD_CURRENT_HINT', hint.hint)
+        }
+      ).catch(error => console.log("LOAD HINT API ERROR: " + JSON.stringify(error, null, 2)))
+    },
+    buyHint({commit,dispatch,state},{questId}) {
+      console.log("[buyHint] questId -> " + JSON.stringify(questId))
+      console.log("[buyHint] state.token -> " + JSON.stringify(state.token))
+      const characterId = state.character.characterId
+      const options = {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Request-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Authorization': state.token,
+        },
+      }
+
+      const data = {
+        "questId": questId,
+        "characterId": characterId
+      }
+
+      axios
+        .put(`https://8nolbrxb67.execute-api.us-west-2.amazonaws.com/prod/characters/${characterId}/buyHint`, data, options)
+        .then(response => response.data )
+        .then(hint => { 
+          console.log("[buyHint] PASS -> " + JSON.stringify(hint, null, 2))
+          if (hint.buyHintStatus === "succeeded") {
+            //console.log("[buyHint] SUCCEEDED -> " + JSON.stringify(hint.buyHintStatus, null, 2))
+            commit('SET_QUEST_MESSAGE', { message: "Hint has been purchased!", state: "success" })
+            dispatch('loadQuests')
+            .catch(error => console.error("[loadQuests] FAIL -> " + JSON.stringify(error, null, 2)))
+          } else if (hint.buyHintStatus === "failed") {
+            //console.log("[buyHint] FAILED -> " + JSON.stringify(hint.buyHintStatus, null, 2))
+            commit('SET_QUEST_MESSAGE', { message: "Could not purchase hint for this quest!", state: "error" })
+            //dispatch('loadCharacter')
+            //.catch(error => console.error("loadCharacter [FAIL] -> " + JSON.stringify(error, null, 2)))
+          }
+      })
+      .catch(error => console.error("[buyHint] FAIL -> " + JSON.stringify(error, null, 2)))
+    },
+    buyItem({commit,dispatch,state},{itemId}) {
+      // [ ] Add item to items.owned
+      // [ ] reduce gold
+      console.log("[buyItem] itemId -> " + JSON.stringify(itemId))
+      console.log("[buyItem] state.token -> " + JSON.stringify(state.token))
+      const characterId = state.character.characterId
+      const options = {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Request-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Authorization': state.token,
+        },
+      }
+
+      const data = {
+        "itemId": itemId,
+        "characterId": characterId
+      }
+
+      axios
+        .put(`https://8nolbrxb67.execute-api.us-west-2.amazonaws.com/prod/characters/${characterId}/buyItem`, data, options)
+        .then(response => response.data )
+        .then(item => { 
+          console.log("[buyItem] PASS -> " + JSON.stringify(item, null, 2))
+          if (item.buyItemStatus === "succeeded") {
+            //console.log("[buyItem] SUCCEEDED -> " + JSON.stringify(item.buyItemStatus, null, 2))
+            commit('SET_QUEST_MESSAGE', { message: "Item has been purchased!", state: "success" })
+            dispatch('loadCharacter')
+            .catch(error => console.error("loadCharacter [FAIL] -> " + JSON.stringify(error, null, 2)))
+          } else if (item.buyItemStatus === "failed") {
+            //console.log("[buyItem] FAILED -> " + JSON.stringify(item.buyItemStatus, null, 2))
+            commit('SET_QUEST_MESSAGE', { message: "Could not purchase item!", state: "error" })
+          }
+      })
+      .catch(error => console.error("[buyItem] FAIL -> " + JSON.stringify(error, null, 2)))
+    },
+    consumeItem({commit,dispatch,state},{itemId}) {
+      console.log("[consumeItem] itemId -> " + JSON.stringify(itemId))
+      console.log("[consumeItem] state.token -> " + JSON.stringify(state.token))
+      const characterId = state.character.characterId
+      const options = {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Request-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Authorization': state.token,
+        },
+      }
+
+      const data = {
+        "itemId": itemId,
+        "characterId": characterId
+      }
+
+      axios
+        .put(`https://8nolbrxb67.execute-api.us-west-2.amazonaws.com/prod/characters/${characterId}/consumeItem`, data, options)
+        .then(response => response.data )
+        .then(item => { 
+          console.log("[consumeItem] PASS -> " + JSON.stringify(item, null, 2))
+          if (item.consumeItemStatus === "succeeded") {
+            //console.log("[consumeItem] SUCCEEDED -> " + JSON.stringify(item.consumeItemStatus, null, 2))
+            commit('SET_QUEST_MESSAGE', { message: "Item has been consumed!", state: "success" })
+            dispatch('loadCharacter')
+            .catch(error => console.error("loadCharacter [FAIL] -> " + JSON.stringify(error, null, 2)))
+          } else if (item.consumeItemStatus === "failed") {
+            //console.log("[consumeItem] FAILED -> " + JSON.stringify(item.consumeItemStatus, null, 2))
+            commit('SET_QUEST_MESSAGE', { message: "Could not consume item!", state: "error" })
+          }
+      })
+      .catch(error => console.error("[consumeItem] FAIL -> " + JSON.stringify(error, null, 2)))
     }
   },
   mutations: {
@@ -185,10 +324,15 @@ export default new Vuex.Store({
       state.character_mana_current = character.stats.mana
       state.character_health_current = character.stats.health
       state.character_messages = character.inbox.messages
+      state.characterItemsOwned = character.items.owned
       state.character_newMessages = character.inbox.newMessages
+      state.character_hints = character.hintsPurchased
     },
     LOAD_QUESTS (state, quests) {
       state.quests = quests
+    },
+    LOAD_CURRENT_HINT(state, hint) {
+      state.currentHint = hint
     },
     SET_CHARACTER_CLASS (state, characterClass) {
       state.character_class = characterClass

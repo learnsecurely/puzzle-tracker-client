@@ -9,21 +9,35 @@
     >
       {{ questResultMessage }}
     </v-snackbar>
-    <v-flex xs12 sm6 offset-sm3>
+    <v-flex class="quest-flex" xs12 sm6 offset-sm3>
       <quest v-for="quest in quests" :key="quest.id" :quest="quest" />
     </v-flex>
   </v-layout>
 </template>
 
-<style lang="scss" scoped>
-  @import '../../assets/scss/colors.scss';
-  
+<style scoped>  
   .layout.quest {
     padding-top: 12px;
+
   }
   .v-card.quest {
     margin-top: 7px;
     margin-bottom: 14px;
+  }
+  .quest-flex {
+
+  }
+  .quest-flex>.v-card {
+    background-image: url(/public/TexturedBackground-Transparent85-1x.png);
+    background-size: 700px;
+    border-radius: 10px;
+    margin-top: 20px;
+    background-position-y: 200px;
+  }
+  @media screen and (max-width: 950px) {
+    .quest-flex>.v-card {
+      background-position-y: 100px;
+    }
   }
 </style>
 

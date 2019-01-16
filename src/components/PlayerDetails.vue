@@ -22,11 +22,11 @@
             <v-progress-linear
               color="success"
               height="15"
-              :value="xp_percent"
+              :value="character_xp_current"
               class="my-0"
             ></v-progress-linear>
           </v-flex>
-          <span style="color: rgb(76, 175, 80)" class="stats-text">{{ xp_percent }}</span>
+          <span style="color: rgb(76, 175, 80)" class="stats-text">{{ character_xp_current }}</span>
         </v-flex>
         <v-flex class="progress-container">
           <v-icon class="icon health" size="23px" color="red darken-1">favorite</v-icon>
@@ -35,22 +35,10 @@
               class="my-0"
               color="error"
               height="15"
-              :value="health_percent"
+              :value="character_health_current"
             ></v-progress-linear>
           </v-flex>
-          <span style="color: rgb(255, 82, 82)" class="stats-text">{{ health_percent }}</span>
-        </v-flex>
-        <v-flex v-if="character_class_has_mana" class="progress-container">
-          <v-icon class="icon mana" color="blue darken-1">opacity</v-icon>
-          <v-flex class="progress">
-            <v-progress-linear
-              class="my-0"
-              color="info"
-              height="15"
-              :value="mana_percent"
-            ></v-progress-linear>
-          </v-flex>
-          <span style="color: rgb(33, 150, 243)" class="stats-text">{{ mana_percent }}</span>
+          <span style="color: rgb(255, 82, 82)" class="stats-text">{{ character_health_current }}</span>
         </v-flex>
       </div>
     </div>
@@ -213,12 +201,7 @@ export default {
   name: 'PlayerDetails',
   data() {
     return {
-      show: false,
-      player_classes: {
-        wizard:  { health_max: 50,  mana_max: 50, has_mana: true  },
-        warrior: { health_max: 100, mana_max: 0,  has_mana: false },
-        healer:  { health_max: 50,  mana_max: 50, has_mana: true  }
-      }
+      show: false
     }
   },
   props: {
@@ -231,33 +214,12 @@ export default {
     character_level: function() {
       return Math.floor(this.$store.state.character_xp_current / this.xp_max * 10)
     },
-    xp_percent: function() {
-      if (this.player_classes[this.$store.state.character_class]) {
-        return this.$store.state.character_xp_current / this.xp_max * 100
-      }
-    },
-    health_percent: function() {
-      console.log("HERE IT IS!!!!!")
-      if (this.player_classes[this.$store.state.character_class]) {
-        return this.$store.state.character_health_current / this.player_classes[this.$store.state.character_class].health_max * 100
-      }
-    },
-    mana_percent: function() {
-      if (this.player_classes[this.$store.state.character_class]) {
-        return this.$store.state.character_mana_current / this.player_classes[this.$store.state.character_class].mana_max * 100
-      }
-    },
-    character_class_has_mana: function() {
-      if (this.$store.state.character_class) {
-        return this.player_classes[this.$store.state.character_class].has_mana
-      } else {
-        false
-      }
-    },
     ...mapState([
       'character',
       'character_class',
       'character_name',
+      'character_xp_current',
+      'character_health_current',
     ])
   },
   mounted() {

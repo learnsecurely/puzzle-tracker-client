@@ -1,6 +1,5 @@
-
 <template>
-  <v-card hover raised color="hsl(209,20%,25%)" class="mb-3">
+  <v-card hover raised color="transparent" style="margin-bottom: 0 !important" class="mb-3">
     <v-img
       position="center top"
       :aspect-ratio="quest.aspect_ratio"
@@ -23,7 +22,7 @@
             <v-btn
               flat
               slot="activator"
-              class="submitFlagButton"
+              class="questButton"
             >Submit Flag</v-btn>
             <v-card>
               <v-list>
@@ -50,6 +49,61 @@
           </v-menu>
         </div>
       </v-form>
+
+      <v-form v-show="buyableHint" ref="buyHintForm" lazy-validation>
+        <div class="text-xs-center">
+          <v-menu
+            v-model="buyHintMenu"
+            :close-on-content-click="false"
+            :nudge-width="180"
+          >
+            <v-btn
+              flat
+              slot="activator"
+              class="questButton"
+            >Buy Hint</v-btn>
+           <v-card>
+              <v-card-title primary-title>
+                <div>
+                  <div class="headline">Purchase Hint</div>
+                  <span>Click the button below to purchase a hint for {{ quest.hintCost }} gold:</span>
+                </div>
+              </v-card-title>
+              <v-card-actions>
+                <v-btn flat @click="buyHintMenu = false">Close</v-btn>
+                <v-btn color="primary" flat @click="buyHint">Buy Hint</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-menu>
+        </div>
+      </v-form>
+
+      <div class="text-xs-center">
+        <v-menu v-show="showableHint"
+          v-model="showHintMenu"
+          :close-on-content-click="false"
+          :nudge-width="180"
+        >
+          <v-btn
+            flat
+            slot="activator"
+            class="questButton"
+            v-on:click="loadHint(quest)"
+          >Show Hint</v-btn>
+          <v-card>
+            <v-card-title primary-title>
+              <div>
+                <div class="headline">Hint</div>
+                <span>{{ currentHint.hint }}</span>
+              </div>
+            </v-card-title>
+            <v-card-actions>
+              <v-btn flat @click="showHintMenu = false">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
+      </div>
+
       <v-spacer></v-spacer>
       <v-btn icon class="questDescriptionButton" @click="show = !show">
       <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
@@ -86,7 +140,7 @@
     font-weight: 400;
     line-height: .9;
   }
-  .submitFlagButton {
+  .questButton {
     padding: 5px 8px;
     margin-left: 8px;
     height: 30px;
@@ -96,7 +150,7 @@
     background-color: hsl(199,20%,30%);
     color: hsl(201,79%,36%);
   }
-  .submitFlagButton:hover {
+  .questButton:hover {
     background-color: hsl(201,79%,46%);
     color: hsl(195,100%,95%);
   }
@@ -110,14 +164,20 @@
   }
   .layout.quest {
     padding-top: 12px;
+    background-color: transparent;
   }
   .v-card.quest {
     margin-top: 7px;
     margin-bottom: 14px;
+    background-color: transparent;
+  }
+ .v-card > .v-image {
+    border-radius: 10px 10px 0 0 !important;
   }
 </style>
 
 <script>
+import { mapState } from 'vuex'
 import VueMarkdown from 'vue-markdown'
 
 export default {
@@ -126,6 +186,9 @@ export default {
     return {
       show: false,
       menu: false,
+      foo: 'bar',
+      buyHintMenu: false,
+      showHintMenu: false,
       flag: '',
       flagRules: [
         v => !!v || 'Flag is required',
@@ -133,11 +196,46 @@ export default {
       ],
     }
   },
+  computed: {
+    buyableHint: function() {
+      console.log("[buyableHint] computed: questId: " + this.quest.id)
+      console.log("[buyableHint] computed: showableHint -> " + this.showableHint)
+      console.log("[buyableHint] computed: character_gold -> " + this.$store.state.character.gold)
+      if (!this.showableHint && this.$store.state.character.gold >= this.quest.hintCost) {
+        return true
+      } else {
+        return false
+      }
+    },
+    showableHint: function() {
+      console.log("[showableHint] computed: questId: " + this.quest.id)
+      const hints = this.$store.state.character_hints
+      console.log("[showableHint] computed: hints: " + JSON.stringify(hints,null,2))
+
+      if (hints.includes(this.quest.id)) {
+        return true
+      } else {
+        return false
+      }
+    },
+    ...mapState([
+      'currentHint'
+    ]),
+  },
   props: ['quest'],
   methods: {
     submitFlag() {
       console.log("submitFlag -> this.quest.id: " + JSON.stringify(this.quest.id))
       this.$store.dispatch('submitFlag',{"flag": this.flag, "questId": this.quest.id})
+    },
+    buyHint() {
+      console.log("buyHint -> this.quest.id: " + JSON.stringify(this.quest.id))
+      this.$store.dispatch('buyHint',{"questId": this.quest.id})
+    },
+    loadHint(quest) {
+      console.log("!! loadHint -> this.quest.id: " + JSON.stringify(this.quest.id))
+      this.$store.dispatch('loadHint',this.quest.id)
+      this.foo = this.quest.title
     },
     clear() {
       this.$refs.form.reset()

@@ -1,24 +1,32 @@
 <template>
-  <v-container style="background-repeat: repeat-y; background-clip: padding-box; background-size: 1600px; background-position: center 0px; background-image: url('public/techbgbareArtboard1@0.5x.png'); background-color: hsl(210,24%,16%)" fluid>
-    <v-layout column>
-      <v-flex>
-        <player-details
-          :player_level="player_level"
-          :xp_current="xp_current"
-          :health_current="health_current"
-          :xp_max="xp_max"
-          :xp_percent="xp_percent"
-          :characters="characters"
-        ></player-details>
-        <quests :player_level="player_level"></quests>
-      </v-flex>
-    </v-layout>
-  </v-container>
+<div class="home">
+  <toolbar/>
+    <v-container fluid>
+      <v-layout column>
+        <v-flex>
+          <player-details
+            :player_level="player_level"
+            :xp_current="xp_current"
+            :health_current="health_current"
+            :xp_max="xp_max"
+            :xp_percent="xp_percent"
+            :characters="characters"
+          ></player-details>
+          <quests :player_level="player_level"></quests>
+        </v-flex>
+      </v-layout>
+    </v-container>
+</div>
 </template>
+
+<style scoped>
+.home {}
+</style>
 
 <script>
 import PlayerDetails from './PlayerDetails'
 import Quests from './Quests'
+import Toolbar from './Toolbar'
 import { components } from 'aws-amplify-vue'
 import { Auth } from 'aws-amplify'
 import axios from "axios"
@@ -36,10 +44,13 @@ export default {
   components: {
     PlayerDetails,
     Quests,
+    Toolbar,
     components
   },
   data() {
     return {
+      mini: false,
+      drawer: false,
       xp_current: 10,
       xp_max: 100,
       xp_percent: 12,

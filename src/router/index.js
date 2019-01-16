@@ -5,6 +5,7 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.css'
 
 import Home from '../components/Home'
+import Splash from '../components/Splash'
 import Setup from '../components/Setup'
 
 import { components, AmplifyEventBus } from 'aws-amplify-vue';
@@ -28,7 +29,7 @@ AmplifyEventBus.$on('authState', async (state) => {
   if (state === 'signedOut'){
     user = null;
     AmplifyStore.commit('setUser', null);
-    router.push({path: '/auth'})
+    router.push({path: '/Splash'})
   } else if (state === 'signedIn') {
     user = await getUser();
     router.push({path: '/'})
@@ -73,13 +74,18 @@ const router = new Router({
       path: '/',
       name: 'Home',
       component: Home,
-      meta: { requiresAuth: true}
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/splash',
+      name: 'Splash',
+      component: Splash
     },
     {
       path: '/setup',
       name: 'Setup',
       component: Setup,
-      meta: { requiresAuth: true}
+      meta: { requiresAuth: true }
     },
     {
       path: '/auth',
@@ -115,7 +121,7 @@ router.beforeResolve(async (to, from, next) => {
     if (!user) {
       console.log("beforeResolve -> 7 " + JSON.stringify(AmplifyStore.state,null,2))
       return next({
-        path: '/auth'
+        path: '/splash'
       });
   } else {
       console.log("beforeResolve -> 1 " + AmplifyStore.state.character.characterId)
