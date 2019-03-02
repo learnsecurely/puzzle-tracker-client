@@ -2,6 +2,10 @@ dist/
 *.log
 node_modules
 aws-exports*
+*ORIG*
+public/*.png
+public/*.jpg
+public/*.svg
 
 ###########################################################################
 # Amplify section

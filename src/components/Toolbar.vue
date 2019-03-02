@@ -1,86 +1,31 @@
 <template>
   <v-toolbar flat color="transparent" class="toolbar-style">
-<transition name="fadeLogo" mode="out-in">
-    <v-img @click="enableToolbar()" v-if="!showToolbar" src="/public/PuzzleTrackerLogo-1x.png" style="max-width: 600px; padding:0;margin:0;"></v-img>
-    <v-toolbar-items v-if="showToolbar">
-      <!-- Messages -->
-      <v-btn
-        v-if="characterExists"
-        icon
-        left
-        class="pr-2"
-        @click="messagesDialog = true; activePopup = true"
-      >
-        <v-badge overlap v-model="showMessages" color="hsl(185,62%,45%)">
-          <span
-            v-if="character_newMessages"
-            slot="badge">{{ character_newMessages }}
-          </span>
-          <v-icon large color="hsl(211,13%,65%)">mail</v-icon>
-        </v-badge>
-      </v-btn>
-      <v-dialog v-model="messagesDialog" max-width="500px">
-        <v-layout row>
-          <v-flex xs12 sm6 offset-sm3 style="max-width: 100%; margin-left: 0%; flex-basis: 100%;">
-            <v-card>
-              <v-toolbar color="hsl(210,22%,49%)">
-                <v-toolbar-side-icon></v-toolbar-side-icon>
-                <v-toolbar-title>Inbox</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn icon>
-                  <v-icon>search</v-icon>
-                </v-btn>
-              </v-toolbar>
-              <v-list two-line>
-                <v-subheader>Messages</v-subheader>
-                <template v-for="(message, index) in character_messages">
-                  <v-divider
-                    v-if="message.divider"
-                    :inset=true
-                    :key="index"
-                  ></v-divider>
-                  <v-list-tile
-                    :key="message.avatar"
-                    avatar
-                    @click=""
-                  >
-                    <v-list-tile-avatar>
-                      <img :src="message_avatar">
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                      <v-list-tile-title v-html="message.from"></v-list-tile-title>
-                      <v-list-tile-sub-title v-html="message.message"></v-list-tile-sub-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </template>
-              </v-list>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-dialog>
+    <transition name="fadeLogo" mode="out-in">
+      <v-img @click="enableToolbar()" v-if="!showToolbar" src="/public/PuzzleTrackerLogo-v1.png" style="max-width: 600px; padding:0;margin:0;"></v-img>
+      <v-toolbar-items v-if="showToolbar">
+        <v-menu :nudge-width="100">
+          <v-toolbar-title slot="activator">
+            <v-btn 
+              v-if="signedIn"
+              icon
+              left
+              class="pr-2"
+              @click="activePopup = true"
 
-      <!-- Account / Profile -->
-      <v-menu :nudge-width="100">
-        <v-toolbar-title slot="activator">
-          <v-btn 
-            v-if="signedIn"
-            icon
-            left
-            class="pr-2"
-          >
-            <v-icon large color="hsl(211,13%,65%)">
-              account_box
-            </v-icon>
-          </v-btn>
-        </v-toolbar-title>
-        <v-list>
-          <v-list-tile>
-            <amplify-sign-out></amplify-sign-out>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-    </v-toolbar-items>
-</transition>
+            >
+              <v-icon large color="hsl(211,13%,65%)">
+                account_box
+              </v-icon>
+            </v-btn>
+          </v-toolbar-title>
+          <v-list>
+            <v-list-tile>
+              <amplify-sign-out></amplify-sign-out>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+      </v-toolbar-items>
+    </transition>
   </v-toolbar>
 </template>
 
@@ -169,8 +114,6 @@ import { mapState } from 'vuex'
 export default {
   name: 'Toolbar',
   data: () => ({
-    showMessages: true,
-    messagesDialog: false,
     showToolbar: false,
     activePopup: false,
     drawer: {
@@ -216,7 +159,6 @@ export default {
   methods: {
     enableToolbar() {
       this.showToolbar = true
-      console.log("TOOLBAR: " + this.showToolbar)
       setTimeout(()=>{
         if (!this.activePopup) { this.disableToolbar() }
       },3500);

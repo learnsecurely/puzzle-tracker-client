@@ -2,7 +2,7 @@
   <v-card hover raised color="transparent" style="margin-bottom: 0 !important" class="mb-3">
     <v-img
       position="center top"
-      :aspect-ratio="quest.aspect_ratio"
+      :aspect-ratio="quest.aspectRatio"
       :src="quest.image"
     ></v-img>
     <v-card-title primary-title class="pt-3 pb-0">
@@ -14,7 +14,7 @@
     <v-card-actions>
       <v-form ref="form" lazy-validation>
         <div class="text-xs-center">
-          <v-menu
+          <v-menu v-show="showableSubmit"
             v-model="menu"
             :close-on-content-click="false"
             :nudge-width="180"
@@ -28,8 +28,7 @@
               <v-list>
                 <v-list-tile avatar>
                   <v-list-tile-content>
-                    <v-list-tile-title>Submit Flag</v-list-tile-title>
-                    <v-list-tile-sub-title>Earns {{ quest.xp }} XP & 5G</v-list-tile-sub-title>
+                    <v-list-tile-title>Submit flag for quest: {{ quest.title }}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
@@ -43,17 +42,17 @@
               </v-list>
               <v-card-actions>
                 <v-btn flat @click="menu = false">Cancel</v-btn>
-                <v-btn color="primary" flat @click="submitFlag">Submit</v-btn>
+                <v-btn color="primary" @click="submitFlag">Submit Flag</v-btn>
               </v-card-actions>
             </v-card>
           </v-menu>
         </div>
       </v-form>
 
-      <v-form v-show="buyableHint" ref="buyHintForm" lazy-validation>
+      <!-- <v-form v-show="gettableHint" ref="getHintForm" lazy-validation>
         <div class="text-xs-center">
           <v-menu
-            v-model="buyHintMenu"
+            v-model="getHintMenu"
             :close-on-content-click="false"
             :nudge-width="180"
           >
@@ -61,40 +60,38 @@
               flat
               slot="activator"
               class="questButton"
-            >Buy Hint</v-btn>
+            >Get Hint</v-btn>
            <v-card>
               <v-card-title primary-title>
                 <div>
-                  <div class="headline">Purchase Hint</div>
-                  <span>Click the button below to purchase a hint for {{ quest.hintCost }} gold:</span>
+                  <div class="headline">Verify</div>
+                  <span>Are you sure you want to get the hint for this quest? ({{ quest.title }})</span>
                 </div>
               </v-card-title>
               <v-card-actions>
-                <v-btn flat @click="buyHintMenu = false">Close</v-btn>
-                <v-btn color="primary" flat @click="buyHint">Buy Hint</v-btn>
+                <v-btn flat @click="getHintMenu = false">Close</v-btn>
+                <v-btn color="primary"  @click="getHint">Get Hint</v-btn>
               </v-card-actions>
             </v-card>
           </v-menu>
         </div>
-      </v-form>
-
+      </v-form> -->
       <div class="text-xs-center">
         <v-menu v-show="showableHint"
           v-model="showHintMenu"
           :close-on-content-click="false"
-          :nudge-width="180"
+          :nudge-width="580"
         >
           <v-btn
             flat
             slot="activator"
             class="questButton"
-            v-on:click="loadHint(quest)"
           >Show Hint</v-btn>
           <v-card>
             <v-card-title primary-title>
               <div>
                 <div class="headline">Hint</div>
-                <span>{{ currentHint.hint }}</span>
+                <span>{{ quest.hint }}</span>
               </div>
             </v-card-title>
             <v-card-actions>
@@ -105,13 +102,73 @@
       </div>
 
       <v-spacer></v-spacer>
-      <v-btn icon class="questDescriptionButton" @click="show = !show">
-      <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+      <v-btn icon v-if="quest.description" class="questDescriptionButton" @click="show = !show">
+        <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
       </v-btn>
     </v-card-actions>
     <v-slide-y-transition>
       <v-card-text style="color: hsl(214,15%,91%);" v-show="show" class="questDescription pt-0 pb-2">
         <vue-markdown :source="quest.description"></vue-markdown>
+
+
+
+<div v-if="quest.multistep">
+  <v-stepper v-model="e6"
+             v-for="(step) in quest.steps" :key="step.id"
+             dark vertical style="background: unset;">
+
+    <v-stepper-step :complete="e6 > step.id" :step="step.id">
+      {{ step.title }}
+      <small v-if="step.subtitle">{{ step.subtitle }}</small>
+    </v-stepper-step>
+
+    <v-stepper-content :step="step.id">
+      <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+      <v-btn color="primary" @click="e6 = (step.id + 1)">Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+  </v-stepper>
+
+  <v-stepper v-model="e6" v-if="quest.multistep" dark vertical style="background: unset;">
+    
+    <v-stepper-step :complete="e6 > 1" step="1">
+      Select an app
+      <small>Summarize if needed</small>
+    </v-stepper-step>
+
+    <v-stepper-content step="1">
+      <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+      <v-btn color="primary" @click="e6 = 2">Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+
+    <v-stepper-step :complete="e6 > 2" step="2">Configure analytics for this app</v-stepper-step>
+
+    <v-stepper-content step="2">
+      <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+      <v-btn color="primary" @click="e6 = 3">Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+
+    <v-stepper-step :complete="e6 > 3" step="3">Select an ad format and name ad unit</v-stepper-step>
+
+    <v-stepper-content step="3">
+      <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+      <v-btn color="primary" @click="e6 = 4">Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+
+    <v-stepper-step step="4">View setup instructions</v-stepper-step>
+    <v-stepper-content step="4">
+      <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+      <v-btn color="primary" @click="e6 = 1">Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+  </v-stepper>
+</div>
+
+
+
       </v-card-text>
     </v-slide-y-transition>
   </v-card>
@@ -174,6 +231,28 @@
  .v-card > .v-image {
     border-radius: 10px 10px 0 0 !important;
   }
+
+.v-stepper--vertical {
+    padding-bottom: 0px;
+}
+
+.v-stepper--vertical .v-stepper__content {
+  margin-left: 12px !important;
+}
+.v-stepper--vertical .v-stepper__step {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+  .v-menu__content {
+    max-width: 30% !important;
+    min-width: 250px;
+  }
+  @media only screen and (max-width: 720px) {
+  .v-menu__content {
+    max-width: 250px !important;
+    min-width: 250px !important;
+  }
+  }
 </style>
 
 <script>
@@ -184,10 +263,12 @@ export default {
   name: 'Quest',
   data() {
     return {
-      show: false,
+      e6: 1,
+      e7: 0,
+      show: true,
       menu: false,
       foo: 'bar',
-      buyHintMenu: false,
+      // getHintMenu: false,
       showHintMenu: false,
       flag: '',
       flagRules: [
@@ -197,22 +278,42 @@ export default {
     }
   },
   computed: {
-    buyableHint: function() {
-      console.log("[buyableHint] computed: questId: " + this.quest.id)
-      console.log("[buyableHint] computed: showableHint -> " + this.showableHint)
-      console.log("[buyableHint] computed: character_gold -> " + this.$store.state.character.gold)
-      if (!this.showableHint && this.$store.state.character.gold >= this.quest.hintCost) {
+    gettableHint: function() {
+      // console.log("[gettableHint] computed: questId: " + this.quest.id)
+      // console.log("[gettableHint] computed: showableHint -> " + this.showableHint)
+      if (this.quest.hint) {
+        return true
+      } else {
+        return false
+      }
+    },
+    showableSubmit: function() {
+      // // console.log("[showableHint] computed: questId: " + this.quest.id)
+      // const hints = this.$store.state.characterHints
+      // // console.log("[showableHint] computed: hints: " + JSON.stringify(hints,null,2))
+
+      // if (hints.includes(this.quest.id)) {
+      //   return true
+      // } else {
+      //   return false
+      // }
+      if (this.quest.flag) {
         return true
       } else {
         return false
       }
     },
     showableHint: function() {
-      console.log("[showableHint] computed: questId: " + this.quest.id)
-      const hints = this.$store.state.character_hints
-      console.log("[showableHint] computed: hints: " + JSON.stringify(hints,null,2))
+      // // console.log("[showableHint] computed: questId: " + this.quest.id)
+      // const hints = this.$store.state.characterHints
+      // // console.log("[showableHint] computed: hints: " + JSON.stringify(hints,null,2))
 
-      if (hints.includes(this.quest.id)) {
+      // if (hints.includes(this.quest.id)) {
+      //   return true
+      // } else {
+      //   return false
+      // }
+      if (this.quest.hint) {
         return true
       } else {
         return false
@@ -225,15 +326,15 @@ export default {
   props: ['quest'],
   methods: {
     submitFlag() {
-      console.log("submitFlag -> this.quest.id: " + JSON.stringify(this.quest.id))
+      // console.log("submitFlag -> this.quest.id: " + JSON.stringify(this.quest.id))
       this.$store.dispatch('submitFlag',{"flag": this.flag, "questId": this.quest.id})
     },
-    buyHint() {
-      console.log("buyHint -> this.quest.id: " + JSON.stringify(this.quest.id))
-      this.$store.dispatch('buyHint',{"questId": this.quest.id})
+    getHint() {
+      // console.log("getHint -> this.quest.id: " + JSON.stringify(this.quest.id))
+      this.$store.dispatch('getHint',{"questId": this.quest.id})
     },
     loadHint(quest) {
-      console.log("!! loadHint -> this.quest.id: " + JSON.stringify(this.quest.id))
+      // console.log("!! loadHint -> this.quest.id: " + JSON.stringify(this.quest.id))
       this.$store.dispatch('loadHint',this.quest.id)
       this.foo = this.quest.title
     },

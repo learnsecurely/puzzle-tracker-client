@@ -1,18 +1,13 @@
 <template>
 <div class="home">
+  <congrats></congrats>
   <toolbar/>
     <v-container fluid>
       <v-layout column>
         <v-flex>
           <player-details
-            :player_level="player_level"
-            :xp_current="xp_current"
-            :health_current="health_current"
-            :xp_max="xp_max"
-            :xp_percent="xp_percent"
-            :characters="characters"
           ></player-details>
-          <quests :player_level="player_level"></quests>
+          <quests></quests>
         </v-flex>
       </v-layout>
     </v-container>
@@ -27,6 +22,7 @@
 import PlayerDetails from './PlayerDetails'
 import Quests from './Quests'
 import Toolbar from './Toolbar'
+import Congrats from './Congrats'
 import { components } from 'aws-amplify-vue'
 import { Auth } from 'aws-amplify'
 import axios from "axios"
@@ -45,33 +41,22 @@ export default {
     PlayerDetails,
     Quests,
     Toolbar,
+    Congrats,
     components
   },
   data() {
     return {
       mini: false,
       drawer: false,
-      xp_current: 10,
-      xp_max: 100,
-      xp_percent: 12,
-      characters: [{class: 'EMPTY', stats: {xp: 0}}],
+      finishedGame: true,
     }
   },
-  computed: {
-    player_level: function() {
-      return Math.floor(this.xp_current / this.xp_max * 10)
-    },
-    player_class: function () {
-      var self = this;
-      return self.characters[0].class
-    },
-    health_current: function () {
-      var self = this;
-      return self.characters[0].stats.health
-    }
+  methods: {
+    showCongrats() { this.$modal.show('finishedGame') }
   },
   created() {
     var self = this;
+    this.showCongrats();
     Auth.currentAuthenticatedUser().then(
       data => {
         const options = {

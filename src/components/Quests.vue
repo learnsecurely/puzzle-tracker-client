@@ -1,5 +1,5 @@
 <template>
-  <v-layout wrap class="quest mt-1">
+  <v-layout class="quest mt-1">
     <v-snackbar
       :value="questResult"
       :multi-line=true
@@ -17,22 +17,18 @@
 
 <style scoped>  
   .layout.quest {
-    padding-top: 12px;
-
+    padding-top: 0;
   }
   .v-card.quest {
     margin-top: 7px;
     margin-bottom: 14px;
   }
-  .quest-flex {
-
-  }
-  .quest-flex>.v-card {
+  .quest-flex > .v-card {
     background-image: url(/public/TexturedBackground-Transparent85-1x.png);
-    background-size: 700px;
+    /* background-size: 700px; */
     border-radius: 10px;
     margin-top: 20px;
-    background-position-y: 200px;
+    background-position-y: 145px;
   }
   @media screen and (max-width: 950px) {
     .quest-flex>.v-card {
@@ -54,7 +50,7 @@ export default {
       flag: '',
       flagRules: [
         v => !!v || 'Flag is required',
-        v => (v && v.length <= 25) || 'Flags will always be fewer than 25 characters'
+        v => (v && v.length <= 50) || 'Flags will always be fewer than 50 characters'
       ],
       quest: { id: 0 },
       completedQuestAlert: true,

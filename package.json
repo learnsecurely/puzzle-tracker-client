@@ -10,12 +10,15 @@
     "deploy": "aws s3 sync dist/ s3://lsec-notes-app-client --delete; aws s3 sync public/ s3://lsec-notes-app-client/public --delete"
   },
   "dependencies": {
+    "@sentry/browser": "^4.6.3",
     "aws-amplify": "^1.1.10",
-    "aws-amplify-vue": "^0.1.7",
+    "aws-amplify-vue": "^0.2.5",
     "axios": "^0.18.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "vue": "^2.5.3",
     "vue-axios": "^2.1.4",
+    "vue-confetti": "^0.4.2",
+    "vue-js-modal": "^1.3.28",
     "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.1",
     "vue-simple-markdown": "^1.0.8",

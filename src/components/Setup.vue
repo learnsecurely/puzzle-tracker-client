@@ -1,171 +1,153 @@
 <template>
-  <v-container id="avatar-modal">
-    <div class="section row welcome-section">
-      <v-flex class="col-6 offest-3 text-center"></v-flex>
-      <h3 v-once>Welcome To Puzzle Tracker</h3>
-      <!-- <v-img>Puzzle Tracker</v-img> -->
-    </div>
-    <div class="section d-flex justify-content-center">
-      <div class="justin-section d-flex align-items-center">
-        <div class="justin-message">
-          <div class="corner-decoration" style="top:    -2px; right: -2px"></div>
-          <div class="corner-decoration" style="top:    -2px; left:  -2px"></div>
-          <div class="corner-decoration" style="bottom: -2px; right: -2px"></div>
-          <div class="corner-decoration" style="bottom: -2px; left:  -2px"></div>
-          <div>
-            <p v-once><vue-markdown :source="introMessage"></vue-markdown></p>
+  <v-container fluid>
+    <v-layout column>
+      <v-flex d-flex justify-center>
+          <v-img src="/public/PuzzleTrackerLogo-v1.png" style="max-width: 600px;"></v-img>
+      </v-flex>
+      <v-container id="avatar-modal">
+        <div style="padding-top: 3px;" class="section d-flex justify-content-center">
+          <div class="justin-section d-flex align-items-center">
+            <div class="justin-message">
+              <div class="corner-decoration" style="top:    -2px; right: -2px"></div>
+              <div class="corner-decoration" style="top:    -2px; left:  -2px"></div>
+              <div class="corner-decoration" style="bottom: -2px; right: -2px"></div>
+              <div class="corner-decoration" style="bottom: -2px; left:  -2px"></div>
+              <div>
+                <p v-once><vue-markdown :source="introMessage"></vue-markdown></p>
+              </div>
+            </div>
+            <div class="npc-justin-textbox"></div>
           </div>
         </div>
-        <div class="npc-justin-textbox"></div>
-      </div>
-    </div>
-    <v-flex class="mr-5 ml-5">
-      <!-- <username-form></username-form> -->
-    </v-flex>
-    <v-form ref="form" lazy-validation>
-      <div class="section row select-character">
-        <v-flex class="col-6 offest-3 text-center"></v-flex>
-        <h3 v-once>Step 1: Select a Character Class</h3>
-      </div>
-      <v-layout column>
-        <v-flex>
-          <div class="text-xs-center">
-            <v-card>
-              <v-list class="py-0">
-                <v-tabs
-                  height="100%"
-                  fixed-tabs
-                  centered
-                  icons-and-text
-                  v-model="characterClassSelect"
-                  color="transparent"
-                  slider-color="transparent">
-                  <v-tab @click="setCharacterClassWizard" :class="characterClassSelect === 0 ? 'black' : ''">
-                    wizard
-                    <v-img width="100%" max-width="100px" height="100%" :src="`/public/wizard-0.5x.png`"></v-img>
-                  </v-tab>
-                  <v-tab @click="setCharacterClassHealer" :class="characterClassSelect === 1 ? 'black' : ''">
-                    healer
-                    <v-img width="100%" max-width="100px" height="100%" :src="`/public/healer-0.5x.png`"></v-img>
-                  </v-tab>
-                  <v-tab @click="setCharacterClassWarrior" :class="characterClassSelect === 2 ? 'black' : ''">
-                    warrior
-                    <v-img width="100%" max-width="100px" height="100%" :src="`/public/warrior-0.5x.png`"></v-img>
-                  </v-tab>
-                </v-tabs>
-              </v-list>
-            </v-card>
-          </div>
+        <v-flex class="mr-5 ml-5">
+          <!-- <username-form></username-form> -->
         </v-flex>
-      </v-layout>
-      <div class="section row select-character">
-        <v-flex class="col-6 offest-3 text-center"></v-flex>
-        <h3 v-once>Step 2: Enter a Character Name</h3>
-      </div>
-      <v-layout column>
-        <v-flex>
-          <div class="text-xs-center">
-            <v-card>
-              <v-list>
-                <v-list-tile>
-                  <v-text-field
-                    v-model="characterName"
-                    label="Name"
-                    required
-                  ></v-text-field>
-                </v-list-tile>
-              </v-list>
-            </v-card>
+        <v-form ref="form" lazy-validation>
+          <div style="padding-top: 20px;" class="d-flex section row select-character">
+            <v-flex class="text-center"></v-flex>
+            <h3 v-once>Enter a Character Name</h3>
           </div>
-        </v-flex>
-      </v-layout>
-      <div class="section row select-character">
-        <v-flex class="col-6 offest-3 text-center"></v-flex>
-        <h3 v-once>Step 3: Training Quests</h3>
-      </div>
-      <v-layout column>
-        <v-flex>
-          <div>
-            <v-card flat>
-              <v-card-text>
-                <div class="section d-flex justify-content-center">
-                  <div class="justin-section d-flex align-items-center">
-                    <div class="justin-message">
-                      <div class="corner-decoration" style="top:    -2px; right: -2px"></div>
-                      <div class="corner-decoration" style="top:    -2px; left:  -2px"></div>
-                      <div class="corner-decoration" style="bottom: -2px; right: -2px"></div>
-                      <div class="corner-decoration" style="bottom: -2px; left:  -2px"></div>
-                      <div>
-                        <p style="margin-bottom: 0;" v-once><vue-markdown :source="trainingQuestsMessage"></vue-markdown></p>
+          <v-layout column>
+            <v-flex>
+              <div>
+                <v-card flat style="background-color: unset;">
+                  <v-card-text style="padding-top: 0px;">
+                    <div class="section d-flex justify-content-center">
+                      <div class="justin-section d-flex align-items-center">
+                        <div class="justin-message">
+                          <div class="corner-decoration" style="top:    -2px; right: -2px"></div>
+                          <div class="corner-decoration" style="top:    -2px; left:  -2px"></div>
+                          <div class="corner-decoration" style="bottom: -2px; right: -2px"></div>
+                          <div class="corner-decoration" style="bottom: -2px; left:  -2px"></div>
+                          <div>
+                            <v-text-field
+                              v-model="characterName"
+                              label="Name"
+                              required
+                              style="padding-top: 0; margin-top: 0;"
+                            ></v-text-field>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <v-container fluid>
-                  <v-layout row wrap class="justify-left">
-                    <v-flex xs12 sm4 md4 px-3 style="flex-basis: unset;">
-                      <v-switch
-                        v-model="morse"
-                        label="Morse Code"
-                        color="green darken-3"
-                        hide-details
-                      ></v-switch>
-                      <v-switch
-                        v-model="caesar"
-                        label="Caesar Shift"
-                        color="green darken-3"
-                        hide-details
-                      ></v-switch>
-                      <v-switch
-                        v-model="atbash"
-                        label="Atbash"
-                        color="green darken-3"
-                        hide-details
-                      ></v-switch>
-                    </v-flex>
-                    <v-flex xs12 sm4 md4 px-3 style="flex-basis: unset;">
-                      <v-switch
-                        v-model="playfair"
-                        label="Playfair"
-                        color="green darken-3"
-                        hide-details
-                      ></v-switch>
-                      <v-switch
-                        v-model="vigenere"
-                        label="Vigenére"
-                        color="green darken-3"
-                        hide-details
-                      ></v-switch>
-                      <v-switch
-                        v-model="h3x"
-                        label="Hexadecimal"
-                        color="green darken-3"
-                        hide-details
-                      ></v-switch>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-              </v-card-text>
-            </v-card>
+                  </v-card-text>
+                </v-card>
+              </div>
+            </v-flex>
+          </v-layout>
+          <div style="padding-top: 20px;" class="d-flex section row select-character">
+            <v-flex class="text-center"></v-flex>
+            <h3 v-once >Opt In/Out of Training Quests</h3>
           </div>
-        </v-flex>
-      </v-layout> 
-      <div class="section row select-character">
-        <v-flex class="col-6 offest-3 text-center"></v-flex>
-        <h3 v-once>Step 4: Click Create Character to Begin</h3>
-      </div>
-      <v-layout column>
-        <v-flex>
-          <div class="text-xs-center">
-            <v-card>
-              <v-card-actions>
-                <v-btn color="primary" flat @click="createCharacter">Create Character</v-btn>
-              </v-card-actions>
-            </v-card>
+          <v-layout column>
+            <v-flex>
+              <div>
+                <v-card flat style="background-color: unset;">
+                  <v-card-text style="padding-top: 0px;">
+                    <div class="section d-flex justify-content-center">
+                      <div class="justin-section d-flex align-items-center">
+                        <div class="justin-message">
+                          <div class="corner-decoration" style="top:    -2px; right: -2px"></div>
+                          <div class="corner-decoration" style="top:    -2px; left:  -2px"></div>
+                          <div class="corner-decoration" style="bottom: -2px; right: -2px"></div>
+                          <div class="corner-decoration" style="bottom: -2px; left:  -2px"></div>
+                          <div>
+                            <p class="trainingQuestP" v-once><vue-markdown :source="trainingQuestsMessage"></vue-markdown></p>
+                          </div>
+                          <v-container style="padding-top: 0;" fluid>
+                            <v-layout row wrap class="justify-left">
+                              <v-flex xs12 sm4 md4 px-3 style="flex-basis: unset;">
+                                <v-switch
+                                  v-model="morse"
+                                  label="Morse Code"
+                                  color="green darken-3"
+                                  hide-details
+                                ></v-switch>
+                                <v-switch
+                                  v-model="caesar"
+                                  label="Caesar Shift"
+                                  color="green darken-3"
+                                  hide-details
+                                ></v-switch>
+                                <v-switch
+                                  v-model="atbash"
+                                  label="Atbash"
+                                  color="green darken-3"
+                                  hide-details
+                                ></v-switch>
+                              </v-flex>
+                              <v-flex xs12 sm4 md4 px-3 style="flex-basis: unset;">
+                                <v-switch
+                                  v-model="playfair"
+                                  label="Playfair"
+                                  color="green darken-3"
+                                  hide-details
+                                ></v-switch>
+                                <v-switch
+                                  v-model="vigenere"
+                                  label="Vigenére"
+                                  color="green darken-3"
+                                  hide-details
+                                ></v-switch>
+                                <v-switch
+                                  v-model="h3x"
+                                  label="Hexadecimal"
+                                  color="green darken-3"
+                                  hide-details
+                                ></v-switch>
+                              </v-flex>
+                            </v-layout>
+                          </v-container>
+                        </div>
+                      </div>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </div>
+            </v-flex>
+          </v-layout>
+          <div style="padding-top: 20px;" class="d-flex section row select-character">
+            <v-flex class="col-6 offest-3 text-center"></v-flex>
+            <h3 v-once>Click Create Character to Begin</h3>
           </div>
-        </v-flex>
-      </v-layout> 
-    </v-form>
+          <v-layout column>
+            <v-flex>
+              <div>
+                <v-card flat style="background-color: unset;">
+                  <v-card-text style="padding-top: 0px;">
+                    <div class="section d-flex justify-content-center">
+                      <div class="justin-section d-flex align-items-center">
+                        <v-btn color="primary"  @click="createCharacter">Create Character</v-btn>
+                      </div>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </div>
+            </v-flex>
+          </v-layout> 
+        </v-form>
+      </v-container>
+    </v-layout>
   </v-container>
 </template>
 
@@ -187,19 +169,10 @@ export default {
       vigenere: true,
       h3x: true,
       characterName: '',
-      characterClass: '',
-      characterClasses: [ 'healer','wizard','warrior' ],
       text: 'center',
       icon: 'justify',
-      toggle_none: null,
-      toggle_one: 0,
-      toggle_exclusive: 2,
-      toggle_multiple: [0, 1, 2],
-      wizard_image: '/public/wizard-0.5x.png',
-      characterClassSelect: -1,
-      welcomeTo: "Lorem ipsum dolor",
-      introMessage: "Welcome to the B-Sides SF Puzzle Tracker, an rpg-themed crypto-puzzle game for B-Sides SF 2019.\n\nPuzzles will be presented to you as **Quests**, each with a challenge, a description, a(n) flag/answer, and a reward of gold and XP (experience points). Every 10 XP results in a new level and new quest(s). Reach 100 XP to win the game.\n\nGold can be used to purchase health & mana potions. Health potions replenish health lost from either incorrect answers/flags or from unfortunate outcomes in the quest line. Before we begin, select from a few different character classes, and give your character a name.",
-      trainingQuestsMessage: "Before the main quest lines begin, there are a number of training quests that will teach you the skills necessary to complete the game. However, if you already know some or all of these techniques, you can opt out of them below by toggling them to the off (grey) position.",
+      introMessage: "Welcome to **Crypt-O-Pzzlr**, a web-based game where you complete puzzles by decoding messages, solving riddles, and applying a little ingenuity.\n\nPuzzles are presented to you as quests, and successfully submitting the flag for a quest will earn you points. All quests, except for the last one, will offer an optional hint to help you along if you get stuck.\n\nGive your character a name and click the **CREATE CHARACTER** button to begin your adventure! :)",
+      trainingQuestsMessage: "Before the main quests begin, there are a several optional training quests that will teach you basic cryptography skills, some of which are necessary to complete the game. However, if you already know some or all of these techniques, you can opt out of them below by toggling them to the off (grey) position.",
     }
   },
   components: {
@@ -208,23 +181,25 @@ export default {
   methods: {
     createCharacter() {
       console.log("createCharacter -> this.characterName: " + JSON.stringify(this.characterName))
-      console.log("createCharacter -> this.characterClass: " + JSON.stringify(this.characterClass))
       console.log("NO CHARACTER. CREATING CHARACTER")
+
       var questsCompleted = [ ]
-      var initialXp = 0
-      if (!this.morse)    { questsCompleted.push(1); initialXp += 2; console.log("MORSE") }
-      if (!this.caesar)   { questsCompleted.push(2); initialXp += 2; console.log("CAESAR") }
-      if (!this.atbash)   { questsCompleted.push(3); initialXp += 2; console.log("ATBASH") }
-      if (!this.playfair) { questsCompleted.push(4); initialXp += 2; console.log("PLAYFAIR") }
-      if (!this.vigenere) { questsCompleted.push(5); initialXp += 2; console.log("VIGENERE") }
+      var initialPoints = 0
+
+      if (!this.morse)    { questsCompleted.push(1); initialPoints += 2; console.log("MORSE") }
+      if (!this.caesar)   { questsCompleted.push(2); initialPoints += 2; console.log("CAESAR") }
+      if (!this.atbash)   { questsCompleted.push(3); initialPoints += 2; console.log("ATBASH") }
+      if (!this.playfair) { questsCompleted.push(4); initialPoints += 2; console.log("PLAYFAIR") }
+      if (!this.vigenere) { questsCompleted.push(5); initialPoints += 2; console.log("VIGENERE") }
+
       const data = {
         userId: this.$store.state.user.attributes.sub,
         characterId: uuid.v1(),
         name: this.characterName,
-        class: this.$store.state.character_class,
         questsCompleted: questsCompleted,
-        initialXp: initialXp,
+        initialPoints: initialPoints,
       }
+      
       return this.$store.dispatch('createCharacter',data).then(() => {
         console.log("CHARACTER CREATED NAMED -> " + this.$store.state.character.name)
         this.$router.push('/')
@@ -232,21 +207,6 @@ export default {
     },
     clear() {
       this.$refs.form.reset()
-    },
-    setCharacterClassHealer() {
-      return this.$store.dispatch('setCharacterClass','healer').then(() => {
-        console.log("setCharacterClassHealer -> " + this.$store.state.character_class)
-      })
-    },
-    setCharacterClassWarrior() {
-      return this.$store.dispatch('setCharacterClass','warrior').then(() => {
-        console.log("setCharacterClassWarrior -> " + this.$store.state.character_class)
-      })
-    },
-    setCharacterClassWizard() {
-      return this.$store.dispatch('setCharacterClass','wizard').then(() => {
-        console.log("setCharacterClassWizard -> " + this.$store.state.character_class)
-      })
     }
   }
 }
@@ -254,15 +214,23 @@ export default {
 
 <style lang="scss" scoped>
   @import '../../assets/scss/colors.scss';
+
+.v-card__text {
+ padding: 0px;
+}
+  p.trainingQuestP > div > p {
+    margin-bottom: 0 !important;
+    padding-bottom: 0;
+  }
   #creator-background {
     background-color: $purple-200;
   }
   #avatar-modal {
+      background-image: url(/public/TexturedBackground-Transparent85-1x.png);
     width: 95%;
     max-width: 600px;
     // height: 670px;
     border-radius: 8px;
-    background-color: #6e6e6e;
     color: black;
     box-shadow: 0 2px 16px 0 rgba(26, 24, 29, 0.32);
     margin: 0 auto;
@@ -270,6 +238,12 @@ export default {
     padding-top: 1em;
     position: relative;
   }
+
+  .v-input--selection-controls {
+    margin-top: 0px;
+    margin-bottom: 6px;
+  }
+
   .container {
     flex: unset;
   }
@@ -289,8 +263,8 @@ export default {
   }
   h3 {
     font-size: 20px;
-    font-weight: 300;
-    color: black;
+    font-weight: 500;
+    color: white;
   }
   .purchase-all {
     margin-bottom: 1em;

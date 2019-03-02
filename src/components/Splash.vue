@@ -1,51 +1,31 @@
 <template>
-<body>
-    <header>
-        <nav>
-            <a>Puzzle Tracker <span>CRYPTO</span></a>
-            <a href="#"><img src="/public/nav_icon.png" alt="nav icon"></a>
-        </nav>
-        <h1>Level up your character as you solve various cryptography puzzles.</h1>
-        <a href="#/auth" class="btnOutline">Sign Up</a>
-    </header>
-    <div class="team">
-        <h1>Select from multiple characters.</h1>
-        <div class="characterClasses">
-            <div class="characterClass">
-                <img src="/public/wizard.png" alt="character icon">
-                <h3>Wizard</h3>
-            </div>
-            <div class="characterClass">
-                <img src="/public/healer.png" alt="character icon">
-                <h3>Healer</h3>
-            </div>
-            <div class="characterClass">
-                <img src="/public/warrior.png" alt="character icon">
-                <h3>Warrior</h3>
-            </div>
-        </div>
+  <body>
+    <v-flex style="padding-top: 25px; padding-bottom: 20px;" d-flex justify-center>
+      <v-img src="/public/PuzzleTrackerLogo-v1.png" style="max-width: 600px;"></v-img>
+    </v-flex>
+      <v-layout d-flex justify-center row>
+        <v-flex xs12 sm6>
+          <v-card>
+    <div d-flex justify-center style="text-align: center; margin: auto; padding: 20px 50px; 20px; 50px;">
+      <h1>Congratulations on finding the BSides 2019 Crypt-O-Pzzlr!</h1>
     </div>
-    <div class="about">
-        <h1>Optional training quests expose you to cryptography concepts and ciphers like Atbash, Caesar, Playfair, and more.</h1>
-        <div class="icons">
-            <img src="/public/xd_icon.png" alt="Adobe XD Icon">
-            <img src="/public/sketch_icon.png" alt="SketchApp Icon">
-        </div>
+          </v-card>
+        </v-flex>
+      </v-layout>
+      <v-layout style="padding: 25px 0 25px 0;" d-flex justify-center row>
+        <v-flex xs12 sm6>
+          <v-card>
+    <div d-flex justify-center style="text-align: center; margin: auto; padding: 20px 50px; 20px; 50px;">
+      <h2>Before we get started, create an account or sign in below.</h2>
     </div>
+          </v-card>
+        </v-flex>
+      </v-layout>
+
     <div class="callToAction">
-        <h1>Sign Up Now</h1>
-        <a href="#/auth" class="btnFilled">Get Started</a>
+        <amplify-authenticator v-bind:authConfig="authConfig"></amplify-authenticator>
     </div>
-    <footer>
-        <p>(C) 2018 Learn Securely</p>
-        <div class="footerPages">
-            <a href="#">Link1</a>
-            <a href="#">Link2</a>
-            <a href="#">Link3</a>
-            <a href="#">Link4</a>
-        </div>
-    </footer>
-</body>
+  </body>
 </template>
 
 <style scoped>
@@ -69,11 +49,28 @@ h1 {
   font-weight: 100;
   color: #2B9DFF;
 }
+h2 {
+  font-size: 26px;
+  font-weight: 100;
+  color: #2B9DFF;
+}
 h3 {
   font-size: 24px;
 }
 p {
   font-size: 16px;
+}
+.v-card {
+  background-image: url(/public/TexturedBackground-Transparent85-1x.png);
+  background-size: 800px;
+  background-repeat: repeat;
+  background-color: #001C36;
+  border-radius: 10px;
+  background-position: 0 -600px;
+}
+
+.flex.sm6 {
+  max-width: 90%;
 }
 .btnOutline {
   display: block;
@@ -130,17 +127,17 @@ nav a span {
 
 /*------------header------------*/
 header {
-  height: 1000px;
-  min-height: 1000px;
+  /* height: 1000px;
+  min-height: 1000px; */
   padding: 0 5%;
-  background-image: url(/public/background_header.png);
+  /* background-image: url(/public/background_header.png); */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: botttom right;
 }
 header h1 {
   width: 40%;
-  margin: 2em 0 0 0;
+  margin: 0 0 0 0;
 }
 
 
@@ -175,12 +172,12 @@ header h1 {
 /*------------about------------*/
 .about {
   padding: 0 5%;
-  background-image: url(/public/background_about.png);
+  /* background-image: url(/public/background_about.png); */
   background-repeat: no-repeat;
   background-position: -75px center;
   /* background-size: 80%; */
-  height: 900px;
-  min-height: 900px;
+  /* height: 900px;
+  min-height: 900px; */
 }
 .about h1 {
   margin-bottom: 30px;
@@ -197,7 +194,7 @@ header h1 {
 /*------------call-to-action------------*/
 .callToAction {
   text-align: center;
-  padding: 20em 5% 20em 5%;
+  padding: 0 5% 20px 5%;
   background-image: url(/public/background_calltoaction.png);
   background-repeat: no-repeat;
   background-size: 40%;
@@ -233,9 +230,9 @@ footer p, .footerPages {
 /*------------responsive------------*/
 @media only screen and (max-width: 1000px) {
   header {
-    height: 1600px;
-    min-height: 1600px;
-    background-image: url(/public/mobile_background_header.png);
+    /* height: 1600px;
+    min-height: 1600px; */
+    /* background-image: url(/public/mobile_background_header.png); */
     background-repeat: no-repeat;
     background-size: contain;
     background-position: bottom right;
@@ -245,14 +242,14 @@ footer p, .footerPages {
   }
   .team {
     margin: 3em 0 3em 0;
-    background-image: url(/public/mobile_background_team.png);
+    /* background-image: url(/public/mobile_background_team.png); */
     background-position: top;
   }
   .team h1 {
     width: 100%;
   }
   .about {
-    background-image: url(/public/mobile_background_about.png);
+    /* background-image: url(/public/mobile_background_about.png); */
     background-size: contain;
     height: 900px;
     min-height: 900px;
@@ -265,8 +262,8 @@ footer p, .footerPages {
     margin-left: 0;
   }
   .callToAction {
-    margin-top: 25em;
-  padding: 15em 5% 15em 5%;
+    margin-top: 0;
+    padding: 0 5% 20px 5%;
     background-size: 70%;
   }
   .callToAction h1, .callToAction a {
@@ -288,8 +285,13 @@ footer p, .footerPages {
     height: 1300px;
     min-height: 1300px;
   }
+h1 {
+  font-size: 30px !important;
+  font-weight: 100 !important;
+}
   header h1 {
     margin: 1em 0 0 0;
+
   }
   .about h1 {
     padding-top: 800px;
@@ -301,4 +303,52 @@ footer p, .footerPages {
     margin-top: 30px;
   }
 }
+
+.authenticator > div {
+    padding: 0;
+    min-width: 100%;
+    box-shadown: none;
+    -webkit-box-shadow: none;
+}
 </style>
+
+<script>
+import { mapState } from 'vuex'
+
+export default {
+  name: 'Splash',
+  data() {
+    return {
+      class: "authenticator",
+      authConfig: { 
+        signUpConfig: {
+          hideDefaults: true,
+          signUpFields: [
+            {
+              label: 'Userame',
+              key: 'username',
+              required: true,
+              displayOrder: 1,
+              type: 'string'
+            },
+            {
+              label: 'Email',
+              key: 'email',
+              required: true,
+              displayOrder: 2,
+              type: 'string'
+            },
+            {
+              label: 'Password',
+              key: 'password',
+              required: true,
+              displayOrder: 3,
+              type: 'password'
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+</script>

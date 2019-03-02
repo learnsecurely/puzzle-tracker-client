@@ -1,0 +1,14 @@
+{
+    "providers": {
+        "awscloudformation": {
+            "AuthRoleName": "puzzletrackerclient-20181118172923-authRole",
+            "UnauthRoleArn": "arn:aws:iam::202214063264:role/puzzletrackerclient-20181118172923-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::202214063264:role/puzzletrackerclient-20181118172923-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "puzzletrackerclient-20181118172923-deployment",
+            "UnauthRoleName": "puzzletrackerclient-20181118172923-unauthRole",
+            "StackName": "puzzletrackerclient-20181118172923",
+            "StackId": "arn:aws:cloudformation:us-west-2:202214063264:stack/puzzletrackerclient-20181118172923/8bc318f0-eb9a-11e8-b2a7-503ac9841afd"
+        }
+    }
+}

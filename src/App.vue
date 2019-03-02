@@ -9,29 +9,38 @@
   [class*="formSection"]{
     min-width: unset;
   }
+body, html {
+  height: 100%;
+  width: 100%;
+}
+
+.application {
+  width: 100%;
+  background-image: url(/public/tech-background-tall-1x.png)  !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat  !important;
+  background-size: 845px  !important;
+  background-position-y: 150px !important;
+  background-size: 100%  !important;
+}
+
+@media screen and (min-width: 901px) {
   .application {
-    background-color: rgb(0, 28, 54) !important;
-    background-image: url(/public/tech-background-tall-1x.png)  !important;
-    background-repeat: repeat-x  !important;
-    background-attachment: fixed !important;
-    background-size: 845px  !important;
-    background-position-y: 150px !important;
+    background-size: 100% !important;
   }
-  body {
-    background-color: rgb(0, 28, 54) !important;
+}
+@media screen and (max-width: 900px) {
+  .application {
+    background-size: 945px  !important;
+  }
+}
 
+@media screen and (max-width: 600px) {
+  .application {
+    background-size: 645px  !important;
   }
-  @media screen and (max-width: 600px) {
-    .application {
-      background-color: rgb(0, 28, 54) !important;
-      background-image: url(/public/tech-background-tall-1x.png)  !important;
-      background-attachment: fixed !important;
-      background-repeat: no-repeat  !important;
-      background-size: 845px  !important;
-      background-position-y: 150px !important;
+}
 
-    }
-  }
 </style>
 
 <script>
